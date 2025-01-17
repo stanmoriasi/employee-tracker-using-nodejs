@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import  employees from './employees.js';
+import Departments from './departments.js';
 //import cli from './cli.js'
 
 
@@ -8,13 +9,14 @@ const questions = [
         type: 'list',
         name: 'action',
         message: 'What would you like to do?',
-        choices: ['Add Employee', 'View Employees', 'Add Role', 'Remove Role', 'Add Department', 'Remove Department', 'Exit']
+        choices: ['Add Employee', 'View Employees', 'Add Role', 'Remove Role', 'Add Department', 'View Departments', 'Exit']
     }
 ];
 
 const main = async () => {
     const { action } = await inquirer.prompt(questions);
     const employee = new employees();
+    const department = new Departments();
     switch(action){
         case 'Add Employee':
             console.log('Add Employee');
@@ -31,9 +33,12 @@ const main = async () => {
             break;
         case 'Add Department':
             console.log('Add Department');
+            const newDepartment = { id: 1, name: 'New Department' }; // Replace with actual department details
+            department.addDepartment(newDepartment);
             break;
-        case 'Remove Department':
-            console.log('Remove Department');
+        case 'View Departments':
+            console.log('View Departments');
+            department.getDepartments();
             break;
         case 'Exit':
             console.log('Goodbye!');
