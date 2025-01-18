@@ -13,7 +13,7 @@ id SERIAL PRIMARY KEY,
 title VARCHAR(100) NOT NULL,
 salary INTEGER NOT NULL,
 department SERIAL NOT NULL,
-FOREIGN KEY (department) REFERENCES department (id)
+FOREIGN KEY (department) REFERENCES department (id) ON DELETE CASCADE
 );
 
 
@@ -23,6 +23,6 @@ first_name VARCHAR(100) NOT NULL,
 last_name VARCHAR(100) NOT NULL,
 role_id INTEGER,
 manager_id INTEGER,
-FOREIGN KEY (role_id) REFERENCES role (id),
-FOREIGN KEY (manager_id) REFERENCES employee (id)
+FOREIGN KEY (role_id) REFERENCES role (id) ON DELETE CASCADE,
+FOREIGN KEY (manager_id) REFERENCES employee (id) ON DELETE SET NULL
 );
