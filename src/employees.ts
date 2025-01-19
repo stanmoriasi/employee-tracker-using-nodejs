@@ -48,6 +48,24 @@ class employees {
                 });
             });
         }
+
+        public getEmployeeManager(): Promise<any[]> {
+            const sql = `SELECT manager.id, CONCAT(manager.first_name, ' ', manager.last_name) as Manager from employee 
+            LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.id = department.id 
+            LEFT JOIN employee manager on manager.id = employee.manager_id`;
+            return new Promise((resolve, reject) => {
+                pool.query(sql, (err: Error, result: QueryResult) => {
+                    if (err) {
+                        console.error('Error executing query', err.stack);
+                        reject(err);
+                        return;
+                    }
+                    const { rows } = result;
+                    console.table(rows);
+                    resolve(rows);
+                });
+            });
+        }
 }
 
 export default employees;
