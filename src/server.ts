@@ -1,4 +1,5 @@
 import inquirer from "inquirer";
+import colors from 'colors';
 import  employees from './employees.js';
 import Departments from './departments.js';
 import Role from './role.js';
@@ -48,6 +49,7 @@ console.log('Welcome to the Employee Tracker!');
                 break;
             case 'Update an employee role':
                 console.log('Update an employee role');
+                getRolesByDepartment();
                 break;
             case 'Add an employee':
                 addEmployee();
@@ -138,6 +140,9 @@ const addDepartment = () => {
 }
 
 const addRole = () => {
+    const role = new Role();
+    role.getDepartments().then(departments => {
+        const choices = departments.map(department => ({name: department.name, value: department.id}));
     inquirer.prompt([
         {
             type: 'input',
@@ -150,24 +155,32 @@ const addRole = () => {
             message: 'Enter the role salary:'
         },
         {
-            type: 'input',
+            type: 'list',
             name: 'department',
-            message: 'Enter the role department:'
+            message: 'Which department does this role belong to?',
+            choices: choices
         }
     ]).then(answers => {
-        const role = new Role();
+        
         const roleObj = new Role();
         roleObj.title = answers.title;
         roleObj.salary = answers.salary;
         roleObj.department = answers.department;
-        console.log(roleObj);
-        console.log(`\nAdding role...`);
-        console.log(role);
+        console.log(colors.green(`\n ${roleObj.title} has been created successfully!`)); 
         role.addRole(roleObj).then(() => {
             promptUser();
         });
     });
+});
 }
 
+
+//function to get all roles by department
+const getRolesByDepartment = () => {
+    const role = new Role();
+    role.getAllRoles().then(() => {
+        promptUser();
+    });
+}
 //call the promptUser function
 promptUser();
