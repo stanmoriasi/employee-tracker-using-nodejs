@@ -197,12 +197,5 @@ const getDepartments = () => {
     });
 }
 
-
-// const showManagers = () => {
-//     const employee = new employees();
-//     employee.getEmployeeManager().then(() => {
-//         promptUser();
-//     });
-// }
 //call the promptUser function
 promptUser();
