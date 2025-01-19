@@ -4,6 +4,7 @@ import  employees from './employees.js';
 import Departments from './departments.js';
 import Role from './role.js';
 //import cli from './cli.js'
+//import Role from './role';
 
 
 //create a function that will end the application
@@ -20,17 +21,13 @@ console.log('Welcome to the Employee Tracker!');
             name: 'action',
             message: 'What would you like to do?',
             choices: ['View all Deparments', 'View all Roles', 'View all employees', 'Add a Department', 'Add a Role', 'Add an employee', 'Update an employee role', 'Exit']
-            //choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Exit']
         }
     ]).then(async answers => {
         const employee = new employees();
-        const department = new Departments();
+        //const department = new Departments();
         switch(answers.action){
             case 'View all Deparments':
-                department.getDepartments().then(() => {
-                    promptUser();
-                });
-                //employee.addEmployee(answers)
+                getDepartments();
                 break;
             case 'View all Roles':
                 viewRoles();
@@ -81,14 +78,14 @@ const addEmployee = () => {
             message: 'Enter the employee\'s last name:'
         },
         {
-            type: 'input',
+            type: 'list',
             name: 'roleId',
-            message: 'Enter the employee\'s role ID:'
+            message: 'What is the employee\'s role?:'
         },
         {
-            type: 'input',
+            type: 'list',
             name: 'managerId',
-            message: 'Enter the employee\'s manager ID:'
+            message: 'Who is the employee\'s manager:'
         }
     ]).then(answers => {
         const employee = new employees();
@@ -104,7 +101,6 @@ const addEmployee = () => {
         console.log(employee);
         //call the addEmployee function and pass the object
         employee.addEmployee(employeeObj).then(() => {
-            //prompt the user to select an action
             promptUser();
     });
     });
@@ -140,8 +136,9 @@ const addDepartment = () => {
 }
 
 const addRole = () => {
+    const departments = new Departments();
     const role = new Role();
-    role.getDepartments().then(departments => {
+    departments.getDepartments().then(departments => {
         const choices = departments.map(department => ({name: department.name, value: department.id}));
     inquirer.prompt([
         {
@@ -182,5 +179,15 @@ const getRolesByDepartment = () => {
         promptUser();
     });
 }
+
+//function to get all departments
+const getDepartments = () => {
+    const dept = new Departments();
+    dept.getDepartments().then((rows) => {
+        console.table(rows);
+        promptUser();
+    });
+}
+
 //call the promptUser function
 promptUser();

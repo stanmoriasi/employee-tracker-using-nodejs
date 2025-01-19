@@ -29,7 +29,7 @@ class Departments{
     }
 
     public getDepartments():Promise<any[]> {
-        const sql = 'SELECT id as Department_ID, name as Department_Name FROM department';
+        const sql = 'SELECT id, name FROM department';
         return new Promise((resolve, reject) => {
         pool.query(sql, (err: Error, result: QueryResult) => {
             if (err) {
@@ -38,7 +38,7 @@ class Departments{
               return;
             }
             const { rows } = result;
-            console.table(rows);
+            //console.table(rows);
             resolve(rows);
           });
 });
