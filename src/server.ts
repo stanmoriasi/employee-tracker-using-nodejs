@@ -66,6 +66,10 @@ console.log('Welcome to the Employee Tracker!');
 
 //function to add an employee
 const addEmployee = () => {
+    const employee = new employees();
+    employee.getEmployeeManager().then((rows) => {
+    const managerEmployees = rows.map(manager => ({name: `${manager.first_name} ${manager.last_name}`, value: manager.id}));
+    console.log(`managerEmployees Object: ${managerEmployees}`);
     inquirer.prompt([
         {
             type: 'input',
@@ -80,15 +84,17 @@ const addEmployee = () => {
         {
             type: 'list',
             name: 'roleId',
-            message: 'What is the employee\'s role?:'
+            message: 'What is the employee\'s role?:',
+            choices: ['Software Engineer', 'Accountant','Lawyer', 'Sales Lead']
         },
         {
             type: 'list',
             name: 'managerId',
-            message: 'Who is the employee\'s manager:'
+            message: 'Who is the employee\'s manager:',
+            choices: managerEmployees
         }
     ]).then(answers => {
-        const employee = new employees();
+        
         //build an object with the answers
         const employeeObj = {
             firstName: answers.firstName,
@@ -100,10 +106,12 @@ const addEmployee = () => {
         console.log(`\nAdding employee...`);
         console.log(employee);
         //call the addEmployee function and pass the object
-        employee.addEmployee(employeeObj).then(() => {
-            promptUser();
+        // employee.addEmployee(employeeObj).then(() => {
+        //     promptUser();
+    // });
     });
-    });
+}
+);
 }
 
 
@@ -189,5 +197,12 @@ const getDepartments = () => {
     });
 }
 
+
+// const showManagers = () => {
+//     const employee = new employees();
+//     employee.getEmployeeManager().then(() => {
+//         promptUser();
+//     });
+// }
 //call the promptUser function
 promptUser();
