@@ -59,22 +59,6 @@ class Role{
           });
     });
     }
-
-    //this method is used when creating a new role to get all departments and corresponding ids
-    public getDepartments():Promise<any[]> {
-        const sql = 'SELECT name, id FROM department;';
-        return new Promise((resolve, reject) => {
-        pool.query(sql, (err: Error, result: QueryResult) => {
-            if (err) {
-              console.error('Error executing query', err.stack);
-              reject(err);
-              return;
-            }
-            const { rows } = result;
-            resolve(rows);
-          });
-    });
-}
 }
 
 export default Role;
