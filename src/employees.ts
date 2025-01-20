@@ -1,5 +1,6 @@
 import { QueryResult } from "pg";
 import {pool} from "./connection.js";
+import colors from "colors";
 
 interface employee {
     id?: number;
@@ -25,7 +26,7 @@ class employees {
                     reject(err);
                     return;
                 }
-                console.log('Employee added successfully');
+                console.log(colors.green('Employee added successfully'));
                     resolve(result);
                 });
             });
@@ -61,8 +62,24 @@ class employees {
                         return;
                     }
                     const { rows } = result;
-                    console.table(rows);
+                    //console.table(rows);
                     resolve(rows);
+                });
+            });
+        }
+
+        public updateEmployeeRole(employeeId: number, roleId: number) {
+            const sql = `UPDATE employee SET role_id = $1 WHERE id = $2`;
+            const values = [roleId, employeeId];
+            return new Promise((resolve, reject) => {
+                pool.query(sql, values, (err: Error, result: QueryResult) => {
+                    if (err) {
+                        console.error('Error executing query', err.stack);
+                        reject(err);
+                        return;
+                    }
+                    console.log(colors.green('Employee role updated successfully'));
+                    resolve(result);
                 });
             });
         }

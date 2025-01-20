@@ -54,7 +54,7 @@ class Role{
               return;
             }
             const { rows } = result;
-            console.table(rows);
+            //console.table(rows);
             resolve(rows);
           });
     });

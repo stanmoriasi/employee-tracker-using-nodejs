@@ -45,8 +45,7 @@ console.log('Welcome to the Employee Tracker!');
                 addRole();
                 break;
             case 'Update an employee role':
-                console.log('Update an employee role');
-                getRolesByDepartment();
+                updateRole();
                 break;
             case 'Add an employee':
                 addEmployee();
@@ -67,9 +66,13 @@ console.log('Welcome to the Employee Tracker!');
 //function to add an employee
 const addEmployee = () => {
     const employee = new employees();
-    employee.getEmployeeManager().then((rows) => {
-    const managerEmployees = rows.map(manager => ({name: `${manager.first_name} ${manager.last_name}`, value: manager.id}));
-    console.log(`managerEmployees Object: ${managerEmployees}`);
+    const role = new Role();
+    let employeeRoles: { name: string, value: number }[] = [];
+    role.getAllRoles().then((roles) => {
+        employeeRoles = roles.map(role => ({name: role.title, value: role.id}));
+        return employee.getEmployeeManager();
+    }).then((managers) => {
+    const managerEmployees = managers.map(manager => ({name: manager.manager, value: manager.id}));    
     inquirer.prompt([
         {
             type: 'input',
@@ -85,7 +88,7 @@ const addEmployee = () => {
             type: 'list',
             name: 'roleId',
             message: 'What is the employee\'s role?:',
-            choices: ['Software Engineer', 'Accountant','Lawyer', 'Sales Lead']
+            choices: employeeRoles
         },
         {
             type: 'list',
@@ -96,25 +99,60 @@ const addEmployee = () => {
     ]).then(answers => {
         
         //build an object with the answers
+
         const employeeObj = {
             firstName: answers.firstName,
             lastName: answers.lastName,
             roleId: answers.roleId,
             managerId: answers.managerId
         }
-        console.log(employeeObj);
-        console.log(`\nAdding employee...`);
-        console.log(employee);
+        console.log(colors.green(`\nAdding ${employeeObj.firstName} to the database...`));
         //call the addEmployee function and pass the object
-        // employee.addEmployee(employeeObj).then(() => {
-        //     promptUser();
-    // });
+        employee.addEmployee(employeeObj).then(() => {
+            promptUser();
+    });
     });
 }
 );
 }
 
+//function to update an employee role
+const updateRole = () => {
+    const employee = new employees();
+    const role = new Role();
+    let employeeRoles: { name: string, value: number }[] = [];
+    role.getAllRoles().then((roles) => {
+        employeeRoles = roles.map(role => ({name: role.title, value: role.id}));
+        return employee.getEmployees();
+    }).then((employees) => {
+        const employeeList = employees.map(employee => ({name: `${employee.first_name} ${employee.last_name}`, value: employee.id}));
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employeeId',
+                message: 'Select the employee to update:',
+                choices: employeeList
+            },
+            {
+                type: 'list',
+                name: 'roleId',
+                message: 'Select the new role:',
+                choices: employeeRoles
+            }
+        ]).then(answers => {
+            const employeeObj = {
+                id: answers.employeeId,
+                roleId: answers.roleId
+            }
+            console.log(colors.green(`\nUpdating employee role...`));
+            employee.updateEmployeeRole(employeeObj.id, employeeObj.roleId).then(() => {
+                promptUser();
+            });
+        });
+    });
+}
 
+//function to view all roles
 const viewRoles = () => {
     const role = new Role();
     role.getRoles().then(() => {
@@ -122,6 +160,7 @@ const viewRoles = () => {
     });
 }
 
+//function to add a department
 const addDepartment = () => {
     inquirer.prompt([
         {
@@ -143,6 +182,7 @@ const addDepartment = () => {
     });
 }
 
+//function to add a role
 const addRole = () => {
     const departments = new Departments();
     const role = new Role();
@@ -181,12 +221,12 @@ const addRole = () => {
 
 
 //function to get all roles by department
-const getRolesByDepartment = () => {
-    const role = new Role();
-    role.getAllRoles().then(() => {
-        promptUser();
-    });
-}
+// const getRolesByDepartment = () => {
+//     const role = new Role();
+//     role.getAllRoles().then(() => {
+//         promptUser();
+//     });
+// }
 
 //function to get all departments
 const getDepartments = () => {
