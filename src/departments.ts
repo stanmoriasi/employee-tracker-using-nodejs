@@ -1,5 +1,6 @@
 import { QueryResult } from "pg";
 import {pool} from "./connection.js";
+import colors from "colors";
 
 
 interface Department {
@@ -44,6 +45,22 @@ class Departments{
 });
     }
 
+    public deleteDepartment(id: number){
+        const query = `DELETE FROM department WHERE id = $1`;
+        return new Promise<void>((resolve, reject) => {
+          const values = [id];
+
+        pool.query(query, values, (err: Error) => {
+            if (err) {
+              console.error('Error executing query', err.stack);
+              reject(err);
+              return;
+            }
+            console.log(colors.red('Department deleted'));
+            resolve();
+          });
+        });
+      }
     
 
 }
