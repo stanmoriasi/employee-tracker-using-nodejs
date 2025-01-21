@@ -59,6 +59,23 @@ class Role{
           });
     });
     }
+
+    public deleteRole(id: number):Promise<void> {
+        const sql = 'DELETE FROM role WHERE id = $1';
+        const values = [id];
+        return new Promise((resolve, reject) => {
+        pool.query(sql, values, (err: Error) => {
+            if (err) {
+              console.error('Error executing query', err.stack);
+              reject(err);
+              return;
+            }
+            resolve();
+          });
+        
+    }
+  )}
+    
 }
 
 export default Role;
