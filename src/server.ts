@@ -20,7 +20,7 @@ console.log('Welcome to the Employee Tracker!');
             type: 'list',
             name: 'action',
             message: 'What would you like to do?',
-            choices: ['View all Deparments', 'View all Roles', 'View all employees', 'Add a Department', 'Add a Role', 'Add an employee', 'Update an employee role', 'Exit']
+            choices: ['View all Deparments', 'View all Roles', 'View all employees', 'Add a Department', 'Add a Role', 'Add an employee', 'Update an employee role','Delete an employee','Exit']
         }
     ]).then(async answers => {
         const employee = new employees();
@@ -49,6 +49,9 @@ console.log('Welcome to the Employee Tracker!');
                 break;
             case 'Add an employee':
                 addEmployee();
+                break;
+            case 'Delete an employee':
+                deleteEmployee();
                 break;
             case 'Exit':
                 console.log('Goodbye!');
@@ -234,6 +237,26 @@ const getDepartments = () => {
     dept.getDepartments().then((rows) => {
         console.table(rows);
         promptUser();
+    });
+}
+
+const deleteEmployee = () => {
+    const employee = new employees();
+    employee.getEmployees().then((employees) => {
+        const employeeList = employees.map(employee => ({name: `${employee.first_name} ${employee.last_name}`, value: employee.id}));
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employeeId',
+                message: 'Select the employee to delete:',
+                choices: employeeList
+            }
+        ]).then(answers => {
+            console.log(colors.red(`\nDeleting employee ${answers.employeeId}...`));
+            employee.deleteEmployee(answers.employeeId).then(() => {
+                promptUser();
+            });
+        });
     });
 }
 

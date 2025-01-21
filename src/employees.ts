@@ -83,7 +83,23 @@ class employees {
                 });
             });
         }
+        public deleteEmployee(employeeId: number) {
+            const sql = `DELETE FROM employee WHERE id = $1`;
+            const values = [employeeId];
+            return new Promise((resolve, reject) => {
+                pool.query(sql, values, (err: Error, result: QueryResult) => {
+                    if (err) {
+                        console.error('Error executing query', err.stack);
+                        reject(err);
+                        return;
+                    }
+                    console.log(colors.green('Employee deleted successfully'));
+                    resolve(result);
+                });
+            });
+        }
 }
+    
 
 export default employees;
 
