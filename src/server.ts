@@ -3,24 +3,24 @@ import colors from 'colors';
 import  employees from './employees.js';
 import Departments from './departments.js';
 import Role from './role.js';
-//import cli from './cli.js'
-//import Role from './role';
-
 
 //create a function that will end the application
 const quit = () => {
     process.exit();
 }
+
 //create a function that will prompt the user to select an action
 const promptUser = async() => {
 
-console.log('Welcome to the Employee Tracker!');
+console.log(colors.bgGreen(`\n Welcome to the Employee Tracker!`));
     inquirer.prompt([
         {
             type: 'list',
             name: 'action',
             message: 'What would you like to do?',
-            choices: ['View all Deparments', 'View all Roles', 'View all employees', 'Add a Department', 'Add a Role', 'Add an employee', 'Update an employee role','Delete an employee','Exit']
+            choices: ['View all Deparments', 'View all Roles', 'View all employees', 'Add a Department', 
+                'Add a Role', 'Add an employee', 'Update an employee role','Delete an employee','Delete a role', 'Delete a department',
+                'Exit']
         }
     ]).then(async answers => {
         const employee = new employees();
@@ -52,6 +52,12 @@ console.log('Welcome to the Employee Tracker!');
                 break;
             case 'Delete an employee':
                 deleteEmployee();
+                break;
+            case 'Delete a role':
+                deleteRole();
+                break;
+            case 'Delete a department':
+                deleteDepartment();
                 break;
             case 'Exit':
                 console.log('Goodbye!');
@@ -252,6 +258,10 @@ const deleteEmployee = () => {
                 choices: employeeList
             }
         ]).then(answers => {
+            const selectedEmployee = employeeList.find(employee => employee.value === answers.employeeId);
+            if (selectedEmployee) {
+                console.log(colors.red(`\nDeleting ${selectedEmployee.name} from the database...`));
+            }
             console.log(colors.red(`\nDeleting employee ${answers.employeeId}...`));
             employee.deleteEmployee(answers.employeeId).then(() => {
                 promptUser();
@@ -260,5 +270,52 @@ const deleteEmployee = () => {
     });
 }
 
+//function to delete a role
+const deleteRole = () => {
+    const role = new Role();
+    role.getRoles().then((roles) => {
+        const roleList = roles.map(role => ({name: role.title, value: role.id}));
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'roleId',
+                message: 'Select the role to delete:',
+                choices: roleList
+            }
+        ]).then(answers => {
+            const selectedRole = roleList.find(role => role.value === answers.roleId);
+            if (selectedRole) {
+                console.log(colors.red(`\nDeleting ${selectedRole.name} role from the database...`));
+            }
+            role.deleteRole(answers.roleId).then(() => {
+                promptUser();
+            });
+        });
+    });
+}
+
+//function to delete a department
+const deleteDepartment = () => {
+    const department = new Departments();
+    department.getDepartments().then((departments) => {
+        const departmentList = departments.map(department => ({name: department.name, value: department.id}));
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'departmentId',
+                message: 'Select the department to delete:',
+                choices: departmentList
+            }
+        ]).then(answers => {
+            const selectedDepartment = departmentList.find(dept => dept.value === answers.departmentId);
+            if (selectedDepartment) {
+                console.log(colors.red(`\nDeleting the  ${selectedDepartment.name} department...`));
+            }
+            department.deleteDepartment(answers.departmentId).then(() => {
+                promptUser();
+            });
+        });
+    });
+}
 //call the promptUser function
 promptUser();
