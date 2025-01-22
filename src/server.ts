@@ -60,7 +60,7 @@ console.log(colors.bgGreen(`\n Welcome to the Employee Tracker!`));
                 deleteDepartment();
                 break;
             case 'Exit':
-                console.log('Goodbye!');
+                console.log(colors.blue('Thank you for using the Employee Tracker!\n'));
                 quit();
                 break;
             default:
@@ -153,7 +153,8 @@ const updateRole = () => {
                 id: answers.employeeId,
                 roleId: answers.roleId
             }
-            console.log(colors.green(`\nUpdating employee role...`));
+            const selectedEmployee = employeeList.find(employee => employee.value === answers.employeeId);
+            console.log(colors.green(`\nUpdating ${selectedEmployee?.name}\'s role...`));
             employee.updateEmployeeRole(employeeObj.id, employeeObj.roleId).then(() => {
                 promptUser();
             });
@@ -182,9 +183,10 @@ const addDepartment = () => {
         const departmentObj = {
             name: answers.name
         }
-        console.log(departmentObj);
-        console.log(`\nAdding department...`);
-        console.log(department);
+  
+        const selectedDepartment = departmentObj.name;
+
+        console.log(colors.green(`\nAdding new ${selectedDepartment} department to the database...`));
         department.addDepartment(departmentObj).then(() => {
             promptUser();
         });
@@ -228,15 +230,6 @@ const addRole = () => {
 });
 }
 
-
-//function to get all roles by department
-// const getRolesByDepartment = () => {
-//     const role = new Role();
-//     role.getAllRoles().then(() => {
-//         promptUser();
-//     });
-// }
-
 //function to get all departments
 const getDepartments = () => {
     const dept = new Departments();
@@ -262,7 +255,6 @@ const deleteEmployee = () => {
             if (selectedEmployee) {
                 console.log(colors.red(`\nDeleting ${selectedEmployee.name} from the database...`));
             }
-            console.log(colors.red(`\nDeleting employee ${answers.employeeId}...`));
             employee.deleteEmployee(answers.employeeId).then(() => {
                 promptUser();
             });

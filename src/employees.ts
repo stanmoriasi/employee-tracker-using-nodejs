@@ -102,5 +102,3 @@ class employees {
     
 
 export default employees;
-
-//SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) as Manager from employee left join role on employee.role_id = role.id left join department on role.id = department.id left join employee manager on manager.id = employee.manager_id
