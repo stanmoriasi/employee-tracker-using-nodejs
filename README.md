@@ -1,7 +1,7 @@
 # employee-tracker-using-nodejs
 
 ## Description
-  This project is used to help any developer a generate professional README.md file
+  This project is used to perform basic operations on an employee database. The project utilizes Postgres database on the backend, and Inquirer package for generating user prompts on a command line interface.
 
   ## Video Demo
   
