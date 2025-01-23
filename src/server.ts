@@ -18,7 +18,7 @@ console.log(colors.bgGreen(`\n Welcome to the Employee Tracker!`));
             type: 'list',
             name: 'action',
             message: 'What would you like to do?',
-            choices: ['View all Deparments', 'View all Roles', 'View all employees', 'Add a Department', 
+            choices: ['View all Deparments', 'View all Roles', 'View all Employees', 'Add a Department', 
                 'Add a Role', 'Add an employee', 'Update an employee role','Delete an employee','Delete a role', 'Delete a department',
                 'Exit']
         }
@@ -32,8 +32,9 @@ console.log(colors.bgGreen(`\n Welcome to the Employee Tracker!`));
             case 'View all Roles':
                 viewRoles();
                 break;
-            case 'View all employees':
-                employee.getEmployees().then(() => {
+            case 'View all Employees':
+                employee.getEmployees().then((rows) => {
+                    console.table(rows);
                     promptUser();
                 });
                 break;
@@ -41,7 +42,6 @@ console.log(colors.bgGreen(`\n Welcome to the Employee Tracker!`));
                 addDepartment();
                 break;
             case 'Add a Role':
-                console.log('Add a Role');
                 addRole();
                 break;
             case 'Update an employee role':

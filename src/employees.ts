@@ -44,7 +44,6 @@ class employees {
                         return;
                     }
                     const { rows } = result;
-                    console.table(rows);
                     resolve(rows);
                 });
             });
@@ -62,7 +61,6 @@ class employees {
                         return;
                     }
                     const { rows } = result;
-                    //console.table(rows);
                     resolve(rows);
                 });
             });
