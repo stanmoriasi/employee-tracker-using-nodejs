@@ -4,7 +4,7 @@
   This project is used to perform basic operations on an employee database. The project utilizes Postgres database on the backend, and Inquirer package for generating user prompts on a command line interface.
 
   ## Video Demo
-  
+  https://app.screencastify.com/v2/manage/videos/PcpakcnYNMEmHUvaiwjU
   
   ## Table of Contents
   - [Installation](#installation) 
